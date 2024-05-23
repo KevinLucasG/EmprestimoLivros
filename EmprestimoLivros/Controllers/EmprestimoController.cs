@@ -23,24 +23,45 @@ namespace EmprestimoLivros.Controllers
         }
         [HttpGet]
         public IActionResult Editar(int? id)
-        {  
-            if(id == null || id == 0 )
+        {
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
             EmpretismoModel emprestimo = _db.Empretismos.FirstOrDefault(x => x.Id == id);
 
-            if(emprestimo == null)
+            if (emprestimo == null)
             {
                 return NotFound();
             }
             return View(emprestimo);
         }
 
+
+        [HttpGet]
+        public IActionResult Excluir(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            EmpretismoModel emprestimo = _db.Empretismos.FirstOrDefault(x => x.Id == id);
+
+            if (emprestimo == null)
+            {
+                return NotFound();
+            }
+
+
+            return View(emprestimo);
+
+        }
+
         [HttpPost]
         public IActionResult Cadastrar(EmpretismoModel emprestimos)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _db.Empretismos.Add(emprestimos);
                 _db.SaveChanges();
@@ -52,17 +73,31 @@ namespace EmprestimoLivros.Controllers
         }
         [HttpPost]
 
-        public IActionResult Editar(EmpretismoModel emprestimos)
+        public IActionResult Editar(EmpretismoModel emprestimo)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                _db.Empretismos.Update(emprestimos);
+                _db.Empretismos.Update(emprestimo);
                 _db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
 
-            return View(emprestimos);
+            return View(emprestimo);
+        }
+
+        [HttpPost]
+        public IActionResult Remove(EmpretismoModel emprestimo)
+        {
+            if (emprestimo == null)
+            {
+                return NotFound();
+            }
+
+            _db.Empretismos.Remove(emprestimo);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }
